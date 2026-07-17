@@ -87,25 +87,40 @@ if (
         showTestimonial(currentTestimonial + 1);
     }, 6000);
 }
-const customCursor = document.querySelector(".custom-cursor");
+const cursor = document.querySelector(".custom-cursor");
 
-if (customCursor) {
+if (cursor) {
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+
     document.addEventListener("mousemove", (event) => {
-        customCursor.style.left = `${event.clientX}px`;
-        customCursor.style.top = `${event.clientY}px`;
+        mouseX = event.clientX;
+        mouseY = event.clientY;
     });
 
-    const interactiveElements = document.querySelectorAll(
-        "a, button, .image, img"
-    );
+    function animateCursor() {
+        cursorX += (mouseX - cursorX) * 0.18;
+        cursorY += (mouseY - cursorY) * 0.18;
 
-    interactiveElements.forEach((element) => {
-        element.addEventListener("mouseenter", () => {
-            customCursor.classList.add("hover");
-        });
+        cursor.style.transform =
+            `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
 
-        element.addEventListener("mouseleave", () => {
-            customCursor.classList.remove("hover");
+        requestAnimationFrame(animateCursor);
+    }
+
+    animateCursor();
+
+    document
+        .querySelectorAll("a, button, .gallery img")
+        .forEach((element) => {
+            element.addEventListener("mouseenter", () => {
+                cursor.classList.add("hover");
+            });
+
+            element.addEventListener("mouseleave", () => {
+                cursor.classList.remove("hover");
+            });
         });
-    });
 }
